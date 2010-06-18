@@ -64,13 +64,14 @@ let rec bprint_port_out b p = match !p with
   | rp -> bprint_port_resolved b rp
 
 let bprint b =
-  Printf.bprintf b "%a:\n" bprint_port_out out_world;
+  Printf.bprintf b "%a:" bprint_port_out out_world;
   let rec loop i l = 
     match l with 
-      [] -> ()
+      [] -> 
+	Printf.bprintf b ":\n"
     | g::l ->
         assert (i == g.num);
-	Printf.bprintf b "%a%a0#%a%a%s\n"
+	Printf.bprintf b "\n%a%a0#%a%a%s"
 	  bprint_port_in g.in_left
 	  bprint_port_in g.in_right
 	  bprint_port_out g.out_left
@@ -78,7 +79,7 @@ let bprint b =
 	  (if l == [] then "" else ",");
 	loop (i + 1) l
   in loop 0 (List.rev !gates);
-  Printf.bprintf b ":%a\n" bprint_port_in in_world
+  Printf.bprintf b "%a\n" bprint_port_in in_world
 
 let sprint () =
   let b = Buffer.create 512 in
