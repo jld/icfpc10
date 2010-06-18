@@ -3,10 +3,11 @@ type gate = { in_left: port option ref;
               out_left: port option ref;
 	      out_right: port option ref;
 	      num: int }
-and port = X
-         | L of gate
-         | R of gate
-         | P of pipe
+and port = 
+    X
+  | L of gate
+  | R of gate
+  | P of pipe
 and pipe = { in_pipe: port option ref;
              out_pipe: port option ref }
 
