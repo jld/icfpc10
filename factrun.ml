@@ -36,6 +36,18 @@ let wire f po pi =
   | L n -> f.gates.(n).in_left <- r
   | R n -> f.gates.(n).in_right <- r
 
+let checkwire f po pi =
+  let r = match po with
+    X -> f.out_world;
+  | L n -> f.gates.(n).out_left
+  | R n -> f.gates.(n).out_right
+  in
+  if begin match pi with
+    X -> f.in_world != r
+  | L n -> f.gates.(n).in_left != r
+  | R n -> f.gates.(n).in_right != r
+  end then failwith "Gate mismatch"
+
 let tab_left =
   [|0; 2; 1;
     1; 0; 2;
