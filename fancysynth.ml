@@ -178,3 +178,15 @@ let stratwalk ?(helper = fun _ -> None) n targ =
 	    | _ -> failwith "Empty strategy can't happen"
   in
   loop targ [] 0
+
+
+let srvin = [0;1;2;0;2;1;0;1;2;1;0;2;0;1;2;0;2]
+
+let magic idsn limit targ =
+  if List.length targ > limit then None else
+  match Factfind.find_fact_ids idsn [srvin, targ] with
+    None -> None
+  | Some diag -> 
+      let strat = Sother diag in
+      Some ((strat_len strat),[strat])
+
