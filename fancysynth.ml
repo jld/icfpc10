@@ -206,6 +206,8 @@ let the_strat isdn limit ntree =
 	| _ ->
 	    failwith "Can't have no strategy"
 
+let synth idsn limit ntree = fancysynth (the_strat idsn limit ntree)
+
 let go isdn limit ntree key =
   Factory.reset ();
   fancysynth (the_strat isdn limit ntree) key Factory.X Factory.X;
