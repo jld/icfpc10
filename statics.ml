@@ -48,7 +48,25 @@ let randfuel fs n mx =
       Array.init n (fun j ->
 	(Random.int mx) + (if i == 0 && j == 0 then 1 else 0))))
 
-let rec keep_trying car fs n mx =
-  let rf = randfuel fs n mx in
-  if will_run car rf then rf
-  else keep_trying car fs n mx
+let tanks car =
+  let nt = ref 0 in
+  let f x = nt := max !nt (succ x) in
+  List.iter (fun (up,_,dn) ->
+    List.iter f up;
+    List.iter f dn) car;
+  !nt
+
+exception Time_exceeded
+let keep_trying car n mx tries =
+  let fs = tanks car in
+  let rec loop tries =
+    let rf = randfuel fs n mx in
+    if will_run car rf then rf
+    else match tries with
+      None -> loop None
+    | Some x when x <= 0 -> raise Time_exceeded
+    | Some x -> loop (Some (pred x))
+  in
+  loop tries
+
+
