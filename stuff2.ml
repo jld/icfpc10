@@ -2,7 +2,7 @@ open Cheapsynth;;
 open Factrun;;
 open Xdr;;
 
-go (key @ [2;2;0; 1; 1;1;1;1;1;1;2;2;0])
+go (key @ [1;1;1;1;1])
 
 (* List.concat (List.map xdr_int [2;1; 1;1;1;1;1;1;1])) *)
 
