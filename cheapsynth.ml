@@ -16,5 +16,6 @@ let rec cheapsynth trits fpin fpout =
 let key = [1;1;0;2;1;2;1;0;1;1;2;1;0;1;2;2;1]
 
 let go key =
+  Factory.reset ();
   cheapsynth key X X;
   print ()

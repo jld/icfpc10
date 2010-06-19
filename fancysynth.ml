@@ -127,7 +127,7 @@ let strat_unl = function
 let strat_make = function
     Spipe b0 -> makeloop diag_pipe b0
   | Sloop (b0,b1,b2) -> makeloop (diag_loop b0 b1) b2
-  | Sother _ -> failwith "Can't makeloop general strategy"
+  | Sother diag -> diag
 
 let candidates = [|
   [Spipe false; Spipe true;
@@ -190,3 +190,23 @@ let magic idsn limit targ =
       let strat = Sother diag in
       Some ((strat_len strat),[strat])
 
+
+let the_strat isdn limit ntree =
+  fun trit trits ->
+    let targ = trit::trits in
+    match magic isdn limit targ with
+      Some (_, [strat]) -> 
+	Some ([], (strat_make strat))
+    | Some _ -> failwith "Can't happen"
+    | None ->
+	let chop = take ntree targ in
+	match estimate chop with
+	  (_, strat::_) ->
+	    Some ((strat_unl strat targ), (strat_make strat))
+	| _ ->
+	    failwith "Can't have no strategy"
+
+let go isdn limit ntree key =
+  Factory.reset ();
+  fancysynth (the_strat isdn limit ntree) key Factory.X Factory.X;
+  Factory.print ()
