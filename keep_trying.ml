@@ -10,7 +10,7 @@ let tri = if Array.length Sys.argv > 4 then
   Some (int_of_string (Sys.argv.(4)))
 else None
 
-let fuel = keep_trying car msi imx tri
+let fuel = keep_trying msi imx tri car
 
 let _ = 
   go (key @ (en_fuel fuel))

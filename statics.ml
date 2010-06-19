@@ -25,6 +25,7 @@ let rec crunch_pipe n = function
   | s::ss -> matmult s (crunch_pipe n ss)
 	
 let will_run car fuel = 
+  if car == [] then true else
   let n = Array.length fuel.(0) in
   List.for_all (fun (up,auxp,dn) ->
     let diff = matsub
@@ -57,7 +58,7 @@ let tanks car =
   !nt
 
 exception Time_exceeded
-let keep_trying car n mx tries =
+let keep_trying n mx tries car =
   let fs = tanks car in
   let rec loop tries =
     let rf = randfuel fs n mx in
@@ -70,3 +71,13 @@ let keep_trying car n mx tries =
   loop tries
 
 
+let cheese car =
+  Array.create (tanks car) [|[|2|]|]
+
+let strategize strat car_alist =
+  List.fold_right (fun (name,car) acc ->
+    let fuel = strat car in
+    if will_run car fuel then
+      (name,fuel)::acc
+    else
+      acc) car_alist []
