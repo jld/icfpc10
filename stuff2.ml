@@ -1,7 +1,8 @@
 open Cheapsynth;;
 open Factrun;;
+open Xdr;;
 
-go (key @ [2;0;0;0])
+go (key @ (xdr_int 3) @ (xdr_int 3) @ [0;0;0;1;0;0;0;0;0;0;0;0;0;0;0;0])
 
 (*
 let p = Factread.fparse stdin;;
