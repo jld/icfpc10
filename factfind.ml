@@ -33,7 +33,7 @@ let find_fact_k n tests k =
 		if tro != tro' then false
 		else loop trin trout
 	  in 
-	  loop trin trout && xloop tests
+	  loop trin trout && (reset fact; xloop tests)
     in
     if xloop tests then begin
       k diag
