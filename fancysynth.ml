@@ -30,7 +30,7 @@ let leading_zero =
 let gatel inl inr = tab_left.(inl * 3 + inr)
 let gater inl inr = tab_right.(inl * 3 + inr)
 
-let unloop (fs0,fsm,_) ileftp otrits =
+let unloop (fs0,fsm) ileftp otrits =
   let inl0 = if ileftp then 0 else fs0
   and inr0 = if ileftp then fs0 else 0 in
   let outl0 = gatel inl0 inr0
@@ -107,3 +107,74 @@ let diag_loop inleftp outleftp =
 (* (loop _ true) false   00/0 01/2 02/1 *)
 (* (loop _ true) true    00/0 01/1 02/2 *)
 
+type diag = (port list) * (port list)
+
+type strat = 
+    Spipe of bool
+  | Sloop of bool * bool * bool
+  | Sother of diag
+
+let strat_len = function
+    Spipe _ -> 1
+  | Sloop (_,_,_) -> 2
+  | Sother (ds,_) -> (List.length ds) / 2
+
+let strat_unl = function
+    Spipe b0 -> unloop fsm_pipe b0
+  | Sloop (b0,b1,b2) -> unloop (fsm_loop b0 b1) b2
+  | Sother _ -> failwith "Can't unloop general strategy"
+
+let strat_make = function
+    Spipe b0 -> makeloop diag_pipe b0
+  | Sloop (b0,b1,b2) -> makeloop (diag_loop b0 b1) b2
+  | Sother _ -> failwith "Can't makeloop general strategy"
+
+let candidates = [|
+  [Spipe false; Spipe true;
+   Sloop (false, true, false); Sloop (false, true, true);
+   Sloop (true, true, false); Sloop (true, true, true)];
+  [Sloop (false, false, true);
+   Sloop (true, false, true)];
+  [Sloop (false, false, false);
+   Sloop (true, false, false)]|]
+
+let key = Cheapsynth.key
+
+let rec take n l =
+  if n <= 0 then [] else
+  match l with
+    [] -> []
+  | h::t -> h::(take (pred n) t)
+
+let rec estimate = function
+    [] -> 0, []
+  | [0] -> 1, [List.hd (candidates.(0))]
+  | [1] -> 2, [List.hd (candidates.(1))]
+  | [2] -> 2, [List.hd (candidates.(2))]
+  | (itr::_) as itrs ->
+      let cans = candidates.(itr) in
+      let best = ref (max_int, []) in
+      List.iter (fun can ->
+	let rest = strat_unl can itrs in
+	let (cost,strat) = (estimate rest) in
+	let prop = ((strat_len can) + cost, can::strat) in
+	if prop < !best then best := prop) cans;
+      !best
+
+let stratwalk ?(helper = fun _ -> None) n targ =
+  let rec loop targ sacc cacc =
+    match helper targ with
+      Some (cost,strats) ->
+	(cacc + cost, List.rev_append sacc strats)
+    | None ->
+	match targ with
+	  [] -> (cacc, List.rev sacc)
+	| _ ->
+	    let chop = take n targ in
+	    match estimate chop with
+	      (_, strat::_) ->
+		loop (strat_unl strat targ) 
+		  (strat::sacc) ((strat_len strat)+cacc)
+	    | _ -> failwith "Empty strategy can't happen"
+  in
+  loop targ [] 0
