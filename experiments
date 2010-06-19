@@ -1,0 +1,21 @@
+== 0
+for 0 tanks
+using 0 ingredients of air
+dim
+
+== 1 0
+for 1 tanks
+using 0 ingredients of air
+dim
+
+== 1 1 0
+for 1 tanks
+using 1 ingredients of air
+dim
+
+== 1 1 1
+for 1 tanks
+using 1 ingredients of air
+fuel coefficients missing for tank 1
+
+== 2 0 0 0
