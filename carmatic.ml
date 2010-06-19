@@ -18,6 +18,14 @@ let getlines path =
 let carlist () =
   getlines "remote/carlist"
 
+let donelist () =
+  List.filter (fun car -> Sys.file_exists ("victory/fuels/"^car))
+    (carlist ())
+
+let undonelist () =
+  List.filter (fun car -> not (Sys.file_exists ("victory/fuels/"^car)))
+    (carlist ())
+
 
 let getoneline path =
   let fi = open_in path in
@@ -34,3 +42,8 @@ let getcar car =
 
 let allcars () =
   List.map (fun car -> (car, getcar car)) (carlist ())
+
+let targets () =
+  List.map (fun car -> (car, getcar car)) (undonelist ())
+
+
