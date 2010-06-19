@@ -16,6 +16,12 @@ let gates = ref []
 let out_world : port option ref = ref None
 let in_world : port option ref = ref None
 
+let reset () =
+  ctr := 0;
+  gates := [];
+  out_world := None;
+  in_world := None
+
 let gate () = 
   let gate = { in_left = ref None; in_right = ref None;
                out_left = ref None; out_right = ref None;

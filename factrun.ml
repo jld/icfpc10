@@ -84,5 +84,6 @@ let reset f =
     g.out_left := 0;
     g.out_right := 0) f.gates
 
-(* *)
+let size f =
+  Array.length f.gates
 

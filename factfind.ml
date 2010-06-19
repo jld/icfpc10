@@ -70,3 +70,20 @@ let junk n =
 
 let junks n m =
   Array.to_list (Array.init n (fun _ -> junk m))
+
+
+let to_hdl (diagout,diagin) fpin fpout =
+  let n = (List.length diagin) / 2 in
+  let fgs = Array.init n (fun _ -> Factory.gate ()) in (* XXX inorder *)
+  let pp px = function
+      X -> px
+    | L i -> Factory.L (fgs.(i))
+    | R i -> Factory.R (fgs.(i))
+  in
+  List.iter2 (fun pout pin ->
+    Factory.wire (pp fpin pout) (pp fpout pin)) diagout diagin
+
+let facprint diag =
+  Factory.reset ();
+  to_hdl diag Factory.X Factory.X;
+  Factory.print ()
