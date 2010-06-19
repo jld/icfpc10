@@ -60,8 +60,25 @@ let unloop (fs0,fsm,_) ileftp otrits =
       in
       loop outr0 otrits []
 
+let makeloop (fsm_src,fsm_dst) ileftp =
+  let n = (List.length fsm_src) / 2 in
+  let inpn = if ileftp then L n else R n
+  and loopn = if ileftp then R n else L n in
+  let rec loop osrc odst nsrc ndst =
+    match (osrc,odst) with
+      [], [] -> nsrc, ndst
+    | X::osrc, X::odst -> loop osrc odst ((R n)::nsrc) (loopn::ndst)
+    | X::osrc, d::odst -> loop osrc odst ((R n)::nsrc) (d::ndst)
+    | s::osrc, X::odst -> loop osrc odst (s::nsrc) (loopn::ndst)
+    | s::osrc, d::odst -> loop osrc odst (s::nsrc) (d::ndst)
+    | _, _ -> failwith "List lengths"
+  in
+  loop fsm_src fsm_dst [L n; X] [X; inpn]
+
+
+
 let fsm_pipe = (0,(fun x -> x))
-let reify_pipe = (0,(fun x -> x))
+let diag_pipe = [X],[X]
 
 (* pipe false 00/2 01/1 02/0 *)
 (* pipe true  00/2 01/0 02/1 *)
@@ -76,6 +93,14 @@ let fsm_loop inleftp outleftp =
      and outr = gater inl inr in
      state := if outleftp then outr else outl;
      if outleftp then outl else outr))
+
+let diag_loop inleftp outleftp =
+  [X;
+   if outleftp then L 0 else R 0;
+   if outleftp then R 0 else L 0],
+  [if inleftp then L 0 else R 0;
+   X;
+   if inleftp then R 0 else L 0]
     
 (* (loop _ false) false  20/2 21/1 22/0 *)
 (* (loop _ false) true   10/2 11/0 12/1 *)

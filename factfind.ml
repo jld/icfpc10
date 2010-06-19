@@ -8,9 +8,12 @@ let rec do_perms f l r a =
       do_perms f (r@t) [] (h::a);
       do_perms f t (h::r) a
 
+let inputs_for n = 
+  X::(Array.fold_right (@) (Array.init n (fun i -> [L i; R i])) [])
+
 let all_factories n f =
   let fact = factory n in
-  let stuff = X::(Array.fold_right (@) (Array.init n (fun i -> [L i; R i])) [])
+  let stuff = inputs_for n
   in
   do_perms begin fun stuff' ->
     List.iter2 (wire fact) stuff stuff';
