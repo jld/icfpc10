@@ -4,3 +4,4 @@ a.out
 /_build
 *.byte
 *.native
+/remote/pages
