@@ -1,6 +1,5 @@
 open Xdr
 open Statics
-open Cheapsynth
 
 let car = de_car (sbuf Sys.argv.(1))
 let msi = int_of_string (Sys.argv.(2))
@@ -12,5 +11,5 @@ else None
 
 let fuel = keep_trying msi imx tri car
 
-let _ = 
-  go (key @ (en_fuel fuel))
+let () = 
+  Marshal.to_channel stdout fuel []

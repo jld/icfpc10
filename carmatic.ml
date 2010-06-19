@@ -91,3 +91,12 @@ let factorize_fuel synth carid fuel =
   end;
   close_out fr
 
+let siphon_fuel path : Xdr.fuel =
+  let fi = open_in_bin path in
+  let fu = Marshal.from_channel fi in
+  close_in fi;
+  fu
+
+let thaw_fuel carid = 
+  de_fuel (sbuf (getoneline ("victory/fuels/"^carid)))
+
