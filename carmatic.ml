@@ -69,7 +69,7 @@ let factorize_fuel synth carid fuel =
     try Hashtbl.find factory_cache fuel
     with Not_found ->
       Factory.reset ();
-      synth (fuel @ Cheapsynth.key) Factory.X Factory.X;
+      synth (Cheapsynth.key @ fuel) Factory.X Factory.X;
       let factory = Factory.sprint () in
       Hashtbl.add factory_cache fuel factory;
       factory
