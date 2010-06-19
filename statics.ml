@@ -22,7 +22,7 @@ let ident n =
 let rec crunch_pipe n = function
     [] -> ident n
   | [s] -> s
-  | s::ss -> matmult (crunch_pipe n ss) s
+  | s::ss -> matmult s (crunch_pipe n ss)
 	
 let will_run car fuel = 
   let n = Array.length fuel.(0) in
