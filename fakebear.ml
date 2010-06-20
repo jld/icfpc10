@@ -58,3 +58,39 @@ let clobber n car =
   match punches car (ifuel car) n with
     None -> None
   | Some ff -> Some (Array.map (fun x -> [|[|x|]|]) ff)
+
+
+(*  *)
+
+let eyes car ffuel = 
+  let f = List.fold_left (fun a e -> a */ (num_of_int ffuel.(e))) one in
+  List.for_all (fun (up,auxp,dn) ->
+    (f up) >=/ (f dn) +/ (if auxp then zero else one)) car
+
+let aiter n b sum f =
+  let arr = Array.create n 0 in
+  let rec loopi sum i =
+    if sum < i || sum > b * i then () else
+    if i <= 0 then f arr else
+    for x = 1 to b do
+      arr.(n - i) <- x;
+      loopi (sum - x) (pred i)
+    done in
+  loopi sum n 
+
+
+exception Get_off_the_bike of int array
+
+let lazypunch b car =
+  let n = tanks car in
+  try
+    for sum = n to b * n do
+      aiter n b sum (fun ff ->
+	if eyes car ff then
+	  raise (Get_off_the_bike ff))
+    done;
+    None
+  with
+    Get_off_the_bike ff ->
+      Some (Array.map (fun x -> [|[|x|]|]) ff)
+
