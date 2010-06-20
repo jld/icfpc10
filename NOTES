@@ -62,3 +62,12 @@ Okay, on maybe solving by hill-climbing or whatever:
 1) generate perturbed copy
 1') raise when stats say top, lower when stats say btm, but maybe a chance out
 2) If not worse, take
+
+
+Idea from last night:
+
+Use worst difference.
+Find chamber with worst difference.  (Break tie by what... last?)
+Make random changes until it improves
+  (Possibly single changes; maybe keep ones that make it not worse.)
+  

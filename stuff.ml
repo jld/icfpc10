@@ -67,6 +67,9 @@ let stats c =
       ad.(x) <- ad.(x) + 1) dn;
     Array.mapi (fun i u -> u - ad.(i)) au) c
 
+let ssum = List.fold_left (fun a b ->
+  Array.mapi (fun i x -> b.(i) + x) a) (Array.create 6 0)
+
 let cheaptry stuff = 
   List.map (fun dels ->
     let u = ref 1 and d = ref 1 in
@@ -77,6 +80,13 @@ let cheaptry stuff =
       if del > 0 then u := !u * edel else d := !d * edel) dels;
     (!u, !d, dels))
 
+
+let bees car ffuel = 
+  let f = List.fold_left (fun a e -> a *. (float ffuel.(e))) 1. in
+  List.map (fun (up,auxp,dn) ->
+    (f up) -. (f dn) -. (if auxp then 0. else 1.)) car
+
+let _ = 23
 
 (* 
 
