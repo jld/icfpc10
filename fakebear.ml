@@ -1,4 +1,8 @@
 open Statics
+open Num
+
+let zero = num_of_int 0
+let one = num_of_int 1
 
 let stats c = 
   let t = tanks c in
@@ -12,16 +16,16 @@ let stats c =
     Array.mapi (fun i u -> u - ad.(i)) au) c
 
 let bees car ffuel = 
-  let f = List.fold_left (fun a e -> a *. (float ffuel.(e))) 1. in
+  let f = List.fold_left (fun a e -> a */ (num_of_int ffuel.(e))) one in
   List.map (fun (up,auxp,dn) ->
-    (f up), (f dn) +. (if auxp then 0. else 1.)) car
+    (f up), (f dn) +/ (if auxp then zero else one)) car
 
 let punch car st ffuel =
   let b = bees car ffuel in
   let sacc = Array.create (Array.length ffuel) 0
   and burnt = ref false in
   List.iter2 (fun (bxu,bxd) sx ->
-    if (bxu /. bxd) < 1.000000015 then begin (* XXX epsilon *)
+    if bxu < bxd then begin
       burnt := true;
       Array.iteri (fun i se ->
 	sacc.(i) <- sacc.(i) + se) sx
