@@ -31,7 +31,7 @@ let punch car st ffuel =
   for i = 1 to pred (Array.length ffuel) do
     best := max !best (sacc.(i), i)
   done;
-  Some (snd !best)
+  Some !best
 
 let punches car ffuel n =
   let ffuel = Array.copy ffuel
@@ -40,9 +40,12 @@ let punches car ffuel n =
     if n <= 0 then None else
     match punch car st ffuel with
       None -> Some ffuel
-    | Some idx -> 
-	ffuel.(idx) <- ffuel.(idx) + 1;
-	loop (pred n)
+    | Some (del,idx) -> 
+	if del > 0 then begin
+	  ffuel.(idx) <- ffuel.(idx) + 1;
+	  loop (pred n)
+	end else
+	  None
   in loop n
 	
 let ifuel car = Array.create (tanks car) 1
