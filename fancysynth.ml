@@ -18,6 +18,7 @@ let cheap n trit trits =
     Some diag -> Some (trits, diag)
   | None -> None
 
+
 (* Found by randomized testing.  Should work. *)
 let leading_zero =
   Array.map (fun dst -> ([X; L 0; R 0; L 1; R 1; L 2; R 2], dst))
@@ -26,9 +27,8 @@ let leading_zero =
       [R 1; L 1; L 2; R 2; R 0; X; L 0]|]
 
 
-
-let gatel inl inr = tab_left.(inl * 3 + inr)
-let gater inl inr = tab_right.(inl * 3 + inr)
+let gatel inl inr = tab_left.(inl * 2 + inl + inr)
+let gater inl inr = tab_right.(inl * 2 + inl + inr)
 
 let unloop (fs0,fsm) ileftp otrits =
   let inl0 = if ileftp then 0 else fs0
@@ -46,10 +46,12 @@ let unloop (fs0,fsm) ileftp otrits =
 	    let loopsym = fsm loopsym in
 	    let intrit = if ileftp then
 	      (* intrit - loopsym = otrit | intrit = otrit + loopsym *)
-	      (otrit + loopsym) mod 3
+	      let foo = otrit + loopsym in 
+	      if foo >= 3 then foo - 3 else foo
 	    else
 	      (* loopsym - intrit = otrit | loopsym - otrit = intrit *)
-	      (loopsym - otrit + 3) mod 3
+	      let foo = loopsym - otrit in 
+	      if foo < 0 then foo + 3 else foo 
 	    in
 	    let inl = if ileftp then intrit else loopsym 
 	    and inr = if ileftp then loopsym else intrit in
