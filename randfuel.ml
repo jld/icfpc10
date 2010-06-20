@@ -32,13 +32,14 @@ let perturb fu x =
     let i = Random.int (Array.length fu) in
     let j = Random.int (Array.length fu.(i)) in
     let k = Random.int (Array.length fu.(i).(j)) in
-    match fu.(i).(j).(k) with
-      0 -> fu.(i).(j).(k) <- 1
-    | n -> fu.(i).(j).(k) <- 
-	if Random.bool () then
-	  fu.(i).(j).(k) + 1
-	else
-	  fu.(i).(j).(k) - 1
+    if (j != 0) || (k != 0) then
+      match fu.(i).(j).(k) with
+	0 -> fu.(i).(j).(k) <- 1
+      | n -> fu.(i).(j).(k) <- 
+	  if Random.bool () then
+	    fu.(i).(j).(k) + 1
+	  else
+	    fu.(i).(j).(k) - 1
   done;
   fu
       
@@ -49,3 +50,19 @@ let fragility fu ca np nt =
       incr c
   done;
   !c
+
+let rec tryfrag np rt nt nu nd fu n =
+  match trysome nu nd fu n with
+    None -> None
+  | Some (n, sc) ->
+      if fragility fu sc np nt >= rt then
+	Some (n, sc)
+      else
+	tryfrag np rt nt nu nd fu n
+      
+let rec pbreak fu ca x =
+  let fu = perturb fu x in
+  if will_run ca fu then
+    pbreak fu ca x
+  else
+    fu
