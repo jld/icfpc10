@@ -216,3 +216,50 @@ let f =
     [|0;0;0;0;0|]|]|]
 
 *)
+
+
+(* From the now-repurposed randfuel.ml:
+
+(*
+let badness car fuel =
+  if car == [] then 0.0 else
+  let n = Array.length fuel.(0) in
+  let rec loopc car acc =
+    match car with 
+      [] -> acc
+    | (up,auxp,dn)::car ->
+	let diff = matsub
+	    (crunch_pipe n (List.map (Array.get fuel) up))
+	    (crunch_pipe n (List.map (Array.get fuel) dn)) in
+	let rec loopi i acc =
+	  if i >= n then acc else
+	  let rec loopj j acc =
+	    if j >= n then (loopi (succ i) acc) else
+	    let ediff = diff.(i).(j) in
+	    loopj (succ j) (acc -. (if ediff < 0
+	    then (float (ediff - 10))
+	    else (float ediff)))
+	  in loopj 0 acc
+	in let mdiff = (loopi 0 acc)
+	    +. (if (not auxp) && diff.(0).(0) == 0 then 20. else 0.) in
+	loopc car (acc +. mdiff)
+  in
+  loopc car 0.
+*)
+
+(*
+
+A B >= A A B
+A A B >= A B
+
+A^2 = A
+
+ABA >= BCBCB
+BCBCB >= ABA
+
+BABA > BBAA
+BCBA > BAA
+
+*)
+
+*)
