@@ -14,14 +14,14 @@ let stats c =
 let bees car ffuel = 
   let f = List.fold_left (fun a e -> a *. (float ffuel.(e))) 1. in
   List.map (fun (up,auxp,dn) ->
-    (f up) -. (f dn) -. (if auxp then 0. else 1.)) car
+    (f up), (f dn) +. (if auxp then 0. else 1.)) car
 
 let punch car st ffuel =
   let b = bees car ffuel in
   let sacc = Array.create (Array.length ffuel) 0
   and burnt = ref false in
-  List.iter2 (fun bx sx ->
-    if bx < 0. then begin (* XXX epsilon? *)
+  List.iter2 (fun (bxu,bxd) sx ->
+    if (bxu /. bxd) < 1.000000015 then begin (* XXX epsilon *)
       burnt := true;
       Array.iteri (fun i se ->
 	sacc.(i) <- sacc.(i) + se) sx

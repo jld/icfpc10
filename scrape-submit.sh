@@ -6,5 +6,5 @@ do
     perl -le 'undef $/; $_=<>; m:class="errors">(.*?)</span>: ? print "ERROR: $1" : m:<div id="main"><div .*?>(.*?)</div>:s ? print $1 : exit 1' < remote/pages/submit.html
     echo
     echo
-    sleep 1
+    sleep 5
 done
