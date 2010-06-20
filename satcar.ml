@@ -10,14 +10,14 @@ let () =
     let rec loop () =
       let fu = xrandfuel 6 4 5 in
       Printf.eprintf "Trying...\n%!";
-      match tryfrag [5,15,20;5,75,100] 15 16 fu 100000 with
+      match tryfrag [5,14,20;5,70,100] 15 16 fu 20000 with
 	None -> loop ()
       | Some _ -> fu
     in loop ()
   in
   Printf.eprintf "Got fuel!\n%!";
   let car = ref [] in
-  for i = 1 to 20 do
+  for i = 1 to 48 do
     match tryfrag [5,14,20;5,70,100] 15 16 fu max_int with
       Some (n,ca) ->
 	Printf.eprintf "Got rule (%d)\n%!" (max_int - n);
