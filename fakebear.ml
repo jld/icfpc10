@@ -94,3 +94,54 @@ let lazypunch b car =
     Get_off_the_bike ff ->
       Some (Array.map (fun x -> [|[|x|]|]) ff)
 
+(* *)
+
+let ualue pipe twobs = 
+  let a = [|one;zero;zero;one|] in
+    (* Why I'm going to all this trouble to avoid allocating
+       when Num does so even for 2 + 2.... *)
+  List.iter (fun idx ->
+    let (b01,b10,b11) = twobs.(idx)
+    and a00 = a.(0) and a01 = a.(1) and a10 = a.(2) and a11 = a.(3)
+    in
+    let c00 = (            a00          ) +/ (if b10 then a01 else zero)
+    and c01 = (if b01 then a00 else zero) +/ (if b11 then a01 else zero)
+    and c10 = (            a10          ) +/ (if b10 then a11 else zero)
+    and c11 = (if b01 then a10 else zero) +/ (if b11 then a11 else zero) 
+    in
+    a.(0) <- c00; a.(1) <- c01; a.(2) <- c10; a.(3) <- c11) pipe;
+  a
+
+let twobees car twobs =
+  List.for_all (fun (up,auxp,dn) ->
+    let ux = ualue up twobs
+    and dx = ualue dn twobs in
+    ux.(0) >=/ dx.(0) +/ (if auxp then zero else one) &&
+    ux.(1) >=/ dx.(1) &&
+    ux.(2) >=/ dx.(2) &&
+    ux.(3) >=/ dx.(3)) car
+
+let itwob = [|false,false,true;
+	      false,true,true;
+	      false,true,false;
+	      true,false,false;
+	      true,false,true;
+	      true,true,false;
+	      true,true,true;
+	      false,false,false|]
+
+let twopunch lim car =
+  let n = tanks car in
+  try
+    for sum = n to lim * n do
+      aiter n 8 sum (fun ff ->
+	if twobees car (Array.map (fun x -> itwob.(x-1)) ff) then
+	  raise (Get_off_the_bike ff))
+    done;
+    None
+  with Get_off_the_bike ff ->
+    Some (Array.map (fun x ->
+      let (a01,a10,a11) = itwob.(x-1) in
+      [|[|1;                    if a01 then 1 else 0|];
+	[|if a10 then 1 else 0; if a11 then 1 else 0|]|]) ff)
+	      
