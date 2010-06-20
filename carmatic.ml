@@ -47,8 +47,7 @@ let targets () =
   List.map (fun car -> (car, getcar car)) (undonelist ())
 
 
-let register_fuel carid fuel =
-  let fex = en_fuel fuel in
+let register_efuel carid fex =
   let fo = open_out ("victory/fuels/"^carid) in
   begin try 
     List.iter (fun trit ->
@@ -59,12 +58,14 @@ let register_fuel carid fuel =
   end;
   close_out fo
 
+let register_fuel carid fuel = 
+  register_efuel carid (en_fuel fuel)
+
 let factory_cache = Hashtbl.create 17
 let clear_factory_cache () = Hashtbl.clear factory_cache
 
-let factorize_fuel synth carid fuel = 
-  register_fuel carid fuel;
-  let fuel = en_fuel fuel in
+let factorize_efuel synth carid fuel = 
+  register_efuel carid fuel;
   let factory =
     try Hashtbl.find factory_cache fuel
     with Not_found ->
@@ -90,6 +91,9 @@ let factorize_fuel synth carid fuel =
     e -> close_out fr; raise e
   end;
   close_out fr
+
+let factorize_fuel synth carid fuel =
+  factorize_efuel synth carid (en_fuel fuel)
 
 let siphon_fuel path : Xdr.fuel =
   let fi = open_in_bin path in

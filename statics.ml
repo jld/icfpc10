@@ -81,3 +81,10 @@ let strategize strat car_alist =
       (name,fuel)::acc
     else
       acc) car_alist []
+
+let strategize_trusted strat car_alist =
+  List.fold_right (fun (name,car) acc ->
+    match strat car with
+      Some fuel ->
+	(name,fuel)::acc
+    | None -> acc) car_alist []

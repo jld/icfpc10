@@ -74,3 +74,73 @@ let hockeyize n car =
     fu.(big) <- matpow hock pl;
     fu.(big).(0).(0) <- fu.(big).(0).(0) + 1) reco;
   fu
+
+(* MY BIGNUMS IZ PASTEDE ON YAY *)
+
+(* 1. Despite what some random person on IRC may have once said
+      something that sort of suggested1, the server doesn't actually
+      use fixnums. *)
+(* 2. It *does*, however, cut off your factory after 1000 ticks.
+      No matter how fancy your logic generation is.
+      So the longpipes *aren't* crazy matrix problems; they're just bignums. *)
+(* 3. I feel oddly let down -- I was almost having fun with the matrices. *)
+
+open Xdr
+
+let rec ser_inc = function
+    [] -> [1]
+  | 0::l -> 1::l
+  | 1::l -> 2::l
+  | 2::l -> 0::(ser_inc l)
+  | _ -> failwith "Not trit"
+
+let rec ser_dbl = function
+    [] -> []
+  | 0::l -> 0::(ser_dbl l)
+  | 1::l -> 2::(ser_dbl l)
+  | 2::l -> 1::(ser_inc (ser_dbl l))
+  | _ -> failwith "Not trit"
+
+let rec ser_ndbl l = function 
+    0 -> l
+  | n -> ser_ndbl (ser_dbl l) (pred n)
+
+let rec ser_dec = function
+    [] | [0] -> [] (* AAAGH *)
+  | 0::l -> 2::(ser_dec l)
+  | 1::l -> 0::l
+  | 2::l -> 1::l
+  | _ -> failwith "Not trit"
+
+let rec ser_fudge l = match ser_dec l with
+  [] -> []
+| h::t -> h::(ser_fudge t)
+
+let ser_hton l =
+  let l = ser_fudge l in
+  (en_cnt (List.length l))@(List.rev l)
+
+let longcheese car = 
+  let tn = tanks car
+  and reco = recognize_longpipe car in
+  let fu = Array.create tn [] in
+  List.iter (fun (big, small, pl, pu) ->
+    fu.(small) <- [1;1]@en_num 2;
+    fu.(big) <- [1;1]@(ser_hton (ser_inc (ser_ndbl [1] pl)))) reco;
+  (en_cnt tn)@(Array.fold_right (@) fu [])
+
+let maybe_longcheese car =
+  try 
+    Some (longcheese car)
+  with
+    _ -> None
+
+
+(*
+0, = 0      1
+1,0 = 1     3
+2,00 = 4    9
+3,000 = 13  27
+
+
+*)
