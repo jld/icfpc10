@@ -88,3 +88,9 @@ let strategize_trusted strat car_alist =
       Some fuel ->
 	(name,fuel)::acc
     | None -> acc) car_alist []
+
+let xtracheesep car =
+  List.for_all (fun (up,auxp,dn) ->
+    let lu = List.length up
+    and ld = List.length dn in
+    if auxp then lu >= ld else lu > ld) car
