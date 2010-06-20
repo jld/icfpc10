@@ -25,7 +25,7 @@ let punch car st ffuel =
   let sacc = Array.create (Array.length ffuel) 0
   and burnt = ref false in
   List.iter2 (fun (bxu,bxd) sx ->
-    if bxu < bxd then begin
+    if bxu </ bxd then begin
       burnt := true;
       Array.iteri (fun i se ->
 	sacc.(i) <- sacc.(i) + se) sx
