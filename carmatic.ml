@@ -104,3 +104,19 @@ let siphon_fuel path : Xdr.fuel =
 let thaw_fuel carid = 
   de_fuel (sbuf (getoneline ("victory/fuels/"^carid)))
 
+
+let register_car carid car =
+  let ecar = en_car car in
+  let fo = open_out ("victory/cars/"^carid) in
+  begin try 
+    List.iter (fun trit ->
+      output_char fo (char_of_int (trit + 48))) ecar;
+    output_char fo '\n';
+  with 
+    e -> close_out fo; raise e
+  end;
+  close_out fo
+
+
+let thaw_car carid = 
+  de_car (sbuf (getoneline ("victory/cars/"^carid)))

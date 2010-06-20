@@ -51,14 +51,19 @@ let fragility fu ca np nt =
   done;
   !c
 
-let rec tryfrag np rt nt nu nd fu n =
+let rec tryfrag otests nu nd fu n =
   match trysome nu nd fu n with
     None -> None
   | Some (n, sc) ->
-      if fragility fu sc np nt >= rt then
-	Some (n, sc)
-      else
-	tryfrag np rt nt nu nd fu n
+      let rec loop tests =
+	match tests with
+	  [] -> Some (n, sc)
+	| (np,rt,nt)::tests ->
+	    if fragility fu sc np nt >= rt then
+	      loop tests
+	    else
+	      tryfrag otests nu nd fu n
+      in loop otests
       
 let rec pbreak fu ca x =
   let fu = perturb fu x in
