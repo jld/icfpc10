@@ -52,3 +52,13 @@ A(x,y) = (x+y, y)
 B(x,y) = (x, x+y)
 
 
+======
+Okay, on maybe solving by hill-climbing or whatever:
+
+-1) do chamber stats
+0) pick a random fuel; evaluate
+0') badness is (num of unsat chambers, maybe num of unsat mat elem)
+0'') sum stats on unsat chambers
+1) generate perturbed copy
+1') raise when stats say top, lower when stats say btm, but maybe a chance out
+2) If not worse, take
