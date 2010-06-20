@@ -1,16 +1,16 @@
 open Carmatic
 open Statics
-
+  
 let synth = Fancysynth.synth 4 12 6
-
+   
 let turkey car =
   try 
     keep_trying 2 2 (Some 10000) car
   with Time_exceeded -> 
     try keep_trying 3 2 (Some 50000) car
     with Time_exceeded ->
-	cheese car
-
+      cheese car
+	
 let longest car =
   let blah = ref 0 in
   List.iter (fun (up,_,dn) ->
