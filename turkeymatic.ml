@@ -19,7 +19,7 @@ let longest car =
 
 let _ = 
   List.iter (fun (name, car) ->
-    if longest car > 8 then
+    if longest car > 10 then
       Printf.printf "PUNT: %s\n%!" name
     else 
       let fuel = turkey car in
