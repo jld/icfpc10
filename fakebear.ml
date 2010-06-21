@@ -46,13 +46,13 @@ let punches car ffuel n =
       None -> Some ffuel
     | Some (del,idx) -> 
 	if del > 0 then begin
-	  ffuel.(idx) <- (ffuel.(idx) * 11 + 9) / 10;
+	  ffuel.(idx) <- (ffuel.(idx) * 25 + 23 + idx) / 24; (* ffuel.(idx) + 1; *)
 	  if ffuel.(idx) < 0 then None else
 	  loop (pred n)
 	end else
 	  None
   in loop n
-	
+
 let ifuel car = Array.create (tanks car) 1
 
 let clobber n car =

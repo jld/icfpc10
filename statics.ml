@@ -84,11 +84,14 @@ let strategize strat car_alist =
 
 let strategize_trusted strat car_alist =
   List.fold_right (fun (name,car) acc ->
-    Printf.eprintf "%s\n%!" name;
+    Printf.eprintf "%s%!" name;
     match strat car with
       Some fuel ->
+	Printf.eprintf "!\n";
 	(name,fuel)::acc
-    | None -> acc) car_alist []
+    | None -> 
+	Printf.eprintf "\n";
+	acc) car_alist []
 
 let xtracheesep car =
   List.for_all (fun (up,auxp,dn) ->
