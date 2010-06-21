@@ -90,3 +90,10 @@ stuff(n,k) = 1 stuff(n-1,k-1)
 
 stuff(n,k) = [] when n > b * k
              [] when n < k
+
+======
+
+Handle with care:
+let i=i+1
+./suncar.native mine$i && echo $i
+curl -b JSESSIONID=$JSESSIONID --data-urlencode problem@victory/cars/mine$i --data-urlencode exampleSolution.contents@victory/factories/mine$i http://icfpcontest.org/icfp10/instance
