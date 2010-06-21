@@ -47,6 +47,7 @@ let punches car ffuel n =
     | Some (del,idx) -> 
 	if del > 0 then begin
 	  ffuel.(idx) <- (ffuel.(idx) * 11 + 9) / 10;
+	  if ffuel.(idx) < 0 then None else
 	  loop (pred n)
 	end else
 	  None
