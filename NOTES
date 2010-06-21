@@ -100,3 +100,5 @@ curl -b JSESSIONID=$JSESSIONID --data-urlencode problem@victory/cars/mine$i --da
 
 Handle with less care:
 ./cheesematic.native && ./longcheesematic.native && ./bearmatic.native && ./lazybearmatic.native && ./twobearmatic.native && ./turkeymatic.native
+
+cut -d\  -f2 < victory/mycars | fgrep -f - remote/pages/bigtab.txt | sort -nk 2
