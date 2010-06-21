@@ -99,7 +99,7 @@ let i=i+1
 curl -b JSESSIONID=$JSESSIONID --data-urlencode problem@victory/cars/mine$i --data-urlencode exampleSolution.contents@victory/factories/mine$i http://icfpcontest.org/icfp10/instance
 
 Handle with less care:
-./longcheesematic.native && ./bearmatic.native && ./lazybearmatic.native && ./twobearmatic.native && ./turkeymatic.native && ./cheesematic.native
+./bearmatic.native && ./longcheesematic.native && ./lazybearmatic.native && ./twobearmatic.native && ./turkeymatic.native && ./cheesematic.native
 
 cut -d\  -f2 < victory/mycars | sed 's/.*/car & /' | fgrep -f - remote/pages/bigtab.txt | sort -nk 2
 
@@ -120,3 +120,5 @@ score 1990 at 24:36ish
 score 2057 at 24:54ish
 ...
 score 2238 at 25:43ish
+score 2294 at 25:53ish  (2341, 2129)
+
