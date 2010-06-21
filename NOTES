@@ -97,3 +97,6 @@ Handle with care:
 let i=i+1
 ./suncar.native mine$i && echo $i
 curl -b JSESSIONID=$JSESSIONID --data-urlencode problem@victory/cars/mine$i --data-urlencode exampleSolution.contents@victory/factories/mine$i http://icfpcontest.org/icfp10/instance
+
+Handle with less care:
+./cheesematic.native && ./longcheesematic.native && ./bearmatic.native && ./lazybearmatic.native && ./twobearmatic.native && ./turkeymatic.native
