@@ -10,4 +10,5 @@ do
     echo $carno >> remote/carlist
     echo $carstr > remote/cars/$carno
 done
+echo -- >&2
 echo $LAST
