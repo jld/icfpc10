@@ -104,3 +104,6 @@ Handle with less care:
 cut -d\  -f2 < victory/mycars | sed 's/.*/car & /' fgrep -f - remote/pages/bigtab.txt | sort -nk 2
 
 { cut -d\  -f2 victory/mycars; ls victory/fuels } | sed 's/.*/car & /' | fgrep -f - remote/pages/bigtab.txt | awk '{t+=1/$6}END{print t}'
+
+
+score 1535 at 22:15ish
