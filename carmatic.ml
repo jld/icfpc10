@@ -16,7 +16,12 @@ let getlines path =
   List.rev !cr
 
 let carlist () =
-  getlines "remote/carlist"
+  let raw = getlines "remote/carlist" in
+  try
+    let lc = int_of_string (Sys.getenv "LOWCAR") in
+    List.filter (fun s -> (int_of_string s) > lc) raw
+  with 
+    Not_found -> raw
 
 let donelist () =
   List.filter (fun car -> Sys.file_exists ("victory/fuels/"^car))
