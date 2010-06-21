@@ -102,3 +102,5 @@ Handle with less care:
 ./cheesematic.native && ./longcheesematic.native && ./bearmatic.native && ./lazybearmatic.native && ./twobearmatic.native && ./turkeymatic.native
 
 cut -d\  -f2 < victory/mycars | fgrep -f - remote/pages/bigtab.txt | sort -nk 2
+
+{ cut -d\  -f2 victory/mycars; ls victory/fuels } | sed 's/^/car /' | fgrep -f - remote/pages/bigtab.txt | awk '{t+=1/$6}END{print t}'
