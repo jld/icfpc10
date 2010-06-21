@@ -71,3 +71,44 @@ let rec pbreak fu ca x =
     pbreak fu ca x
   else
     fu
+
+
+(* *)
+
+let shuffle a = 
+  let a = Array.of_list a in
+  for i = 1 to (Array.length a) - 1 do
+    let j = Random.int (i + 1) in
+    if i != j then
+      let tmp = a.(i) in
+      a.(i) <- a.(j);
+      a.(j) <- tmp
+  done;
+  Array.to_list a
+
+let randbal n fu =
+  let u = randpipe n (Array.length fu) in
+  [u, false, (shuffle u)]
+
+let iota n = Array.to_list (Array.init n (fun x -> x))
+
+let rec trybal n fu nt =
+  if nt <= 0 then None
+  else
+    let sc = randbal n fu in
+    if will_run sc fu then
+      Some (nt, sc)
+    else
+      trybal n fu (pred nt)
+
+let balcar fu n c =
+  let rec loop c a =
+    if c <= 0 then 
+      let nf = Array.length fu in
+  ((iota nf),true,(iota nf))::(List.sort compare a)
+    else match trybal n fu max_int with
+      Some (_, ch) ->
+	loop (pred c) (ch@a)
+    | _ -> raise Not_found
+  in loop c []
+    
